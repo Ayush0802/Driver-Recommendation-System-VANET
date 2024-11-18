@@ -117,4 +117,3 @@ The system classifies risk into six levels:
 - Secure data transmission
 - Encrypted model predictions
 - Protected sensitive driver information
-
