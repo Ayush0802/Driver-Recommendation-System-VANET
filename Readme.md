@@ -1,4 +1,4 @@
-# Driver Recommendation System using VANET
+# Driver recommendation system using homomorphic encrypted telematics & physiological data
 
 A secure driver recommendation system that analyzes telemetry and physiological data to provide real-time safety recommendations using VANET (Vehicular Ad-hoc Network) technology.
 
@@ -117,3 +117,4 @@ The system classifies risk into six levels:
 - Secure data transmission
 - Encrypted model predictions
 - Protected sensitive driver information
+
