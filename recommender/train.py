@@ -14,7 +14,6 @@ class SecureTelemetryTrainer:
         self.models = {}  
 
     def setup_encryption(self):
-        """Setup the encryption context for secure computation."""
         context = ts.context(
             ts.SCHEME_TYPE.CKKS,
             poly_modulus_degree=8192,
@@ -106,7 +105,6 @@ class SecureTelemetryTrainer:
         return accuracy
 
     def save_model(self, model_path="secure_telemetry_model.joblib"):
-        """Save the trained models and scaler."""
         model_data = {
             "models": self.models,
             "scaler": self.scaler,
@@ -120,7 +118,6 @@ class SecureTelemetryTrainer:
 
 
     def create_risk_labels(self, X):
-        """Create 6-level risk labels based on telemetry data"""
         risk_scores = np.zeros(len(X))
         
         conditions = {
@@ -188,7 +185,6 @@ class SecurePhysiologyTrainer:
         self.models = {}  # To store weights and biases for each class
 
     def setup_encryption(self):
-        """Setup the encryption context for secure computation."""
         context = ts.context(
             ts.SCHEME_TYPE.CKKS,
             poly_modulus_degree=8192,

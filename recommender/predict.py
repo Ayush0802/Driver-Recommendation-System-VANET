@@ -9,9 +9,6 @@ class SecureDriverRecommender:
         self.setup_recommendations()
 
     def load_models(self, telemetry_path, physiology_path):
-        """
-        Loads the telemetry and physiology models along with their scalers and encryption context.
-        """
         # Load telemetry model and scaler
         with open(telemetry_path, 'rb') as f:
             telemetry_data = pickle.load(f)
@@ -29,9 +26,7 @@ class SecureDriverRecommender:
             self.context = ts.Context.load(f.read())
 
     def setup_recommendations(self):
-        """
-        Sets up the recommendations dictionary for different risk levels.
-        """
+
         self.recommendations = {
             0: {
                 'risk_level': 'Very Low',
@@ -96,9 +91,6 @@ class SecureDriverRecommender:
         }
 
     def encrypt_data(self, data):
-        """
-        Encrypts the input data using TenSEAL.
-        """
         return {k: ts.ckks_vector(self.context, [float(v)]) 
                 for k, v in data.items()}
 
