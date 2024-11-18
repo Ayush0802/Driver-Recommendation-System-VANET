@@ -9,11 +9,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Add logging middleware
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
@@ -26,7 +24,7 @@ app.post('/api/recommendations/predict', async (req, res) => {
 
         // Spawn Python process
         const pythonProcess = spawn('python', [
-            '-u',  // Equivalent to pythonOptions: ['-u'] - unbuffered output
+            '-u',  
             path.join(__dirname, './python/predict.py'),
             JSON.stringify(telemetryData),
             JSON.stringify(physiologyData)
@@ -35,20 +33,16 @@ app.post('/api/recommendations/predict', async (req, res) => {
         let dataString = '';
         let errorString = '';
 
-        // Collect data from script
         pythonProcess.stdout.on('data', (data) => {
             dataString += data.toString();
             try {
-                // Try to parse the accumulated data as JSON
                 const jsonData = JSON.parse(dataString);
                 console.log('Parsed data:', jsonData);
                 
-                // Convert recommendations to array if it's not already
                 const recommendations = Array.isArray(jsonData.actions) 
                     ? jsonData.actions 
                     : [jsonData.actions];
 
-                // Send response with proper structure
                 console.log(recommendations);
                 res.json({
                     risk_level: jsonData.risk_level,
@@ -65,7 +59,6 @@ app.post('/api/recommendations/predict', async (req, res) => {
     }
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something broke!' });

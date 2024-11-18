@@ -76,18 +76,6 @@ class SecureDriverRecommender:
                     "Review vehicle telemetry"
                 ]
             },
-            # 6: {
-            #     'risk_level': 'Very High',
-            #     'actions': [
-            #         "WARNING: Very high risk detected",
-            #         "Pull over at next safe location",
-            #         "Minimum 30-minute rest required",
-            #         "Check all vital signs",
-            #         "Vehicle inspection recommended",
-            #         "Consider alternate driver if available",
-            #         "Reassess weather and road conditions"
-            #     ]
-            # },
             5: {
                 'risk_level': 'Critical',
                 'actions': [
@@ -107,7 +95,7 @@ class SecureDriverRecommender:
                 for k, v in data.items()}
 
     def predict(self, telemetry_data, physiology_data):
-        # Ensure feature names and order match those used during training
+        
         telemetry_input_data = {
             'gps_speed': telemetry_data['gps_speed'],
             'cTemp': telemetry_data['cTemp'],
@@ -130,21 +118,14 @@ class SecureDriverRecommender:
         telemetry_input_scaled = self.telemetry_scaler.transform(telemetry_input_df)
         physiology_input_scaled = self.physiology_scaler.transform(physiology_input_df)
         
-        # Update risk level combination logic for 8 levels
         telemetry_risk_level = self.telemetry_model.predict(telemetry_input_scaled)[0]
         physiology_risk_level = self.physiology_model.predict(physiology_input_scaled)[0]
         
-        # Calculate base risk level using max of both inputs
+        # Combined risk level
         combined_risk_level = max(telemetry_risk_level, physiology_risk_level)
-        
-        # Add extra risk level if both telemetry and physiology show elevated risk
-        if telemetry_risk_level >= 4 and physiology_risk_level >= 4:
-            combined_risk_level = min(7, combined_risk_level + 1)
-            
-        # Force maximum risk level if either input is critical
-        if telemetry_risk_level == 7 or physiology_risk_level == 7:
-            combined_risk_level = 7
-        # combined_risk_level = max(telemetry_risk_level,physiology_risk_level)
+
+        if telemetry_risk_level >= 3 and physiology_risk_level >= 3:
+            combined_risk_level = min(5, combined_risk_level + 1)
         
         recommendation = self.recommendations[combined_risk_level]
         
@@ -152,17 +133,13 @@ class SecureDriverRecommender:
 
 def main():
     try:
-        # Get input data from command line arguments
         telemetry_data = json.loads(sys.argv[1])
         physiology_data = json.loads(sys.argv[2])
         
-        # Initialize recommender
         recommender = SecureDriverRecommender()
         
-        # Get prediction
         result = recommender.predict(telemetry_data, physiology_data)
         
-        # Print result as JSON
         print(json.dumps(result))
         
     except Exception as e:
