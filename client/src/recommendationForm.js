@@ -49,7 +49,7 @@ const RecommendationForm = () => {
     setError(null);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/recommendations/predict', {
+      const response = await axios.post('http://localhost:5001/api/recommendations/predict', {
         telemetryData: formData.telemetry,
         physiologyData: formData.physiology
       });

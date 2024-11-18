@@ -1,0 +1,10 @@
+# Machine Learning
+scikit-learn
+numpy
+pandas
+
+# Encryption
+tenseal
+
+# Model Persistence (Saving the Model)
+joblib
